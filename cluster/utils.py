@@ -43,6 +43,12 @@ class DeploymentWriter:
                     apply_cmd += f" -n {self.namespace}"
                 f_out.write(f"{apply_cmd}\n")
 
+    def strip_comments(self, extension, text):
+        if extension in ("yaml", "cfg"):
+            return "\n".join([l for l in text.split("\n") if l.strip()[:1] != "#"])
+        else:
+            return text
+
     def replace_placeholders(self, config, name, text):
         raise NotImplementedError
 
@@ -59,14 +65,8 @@ class DeploymentWriter:
         for template in glob.glob(f"{self.template_dir}/*"):
             with open(template, "r") as f_in:
                 text = f_in.read()
-                text = self.__strip_comments(template.split(".")[-1], text)
+                text = self.strip_comments(template.split(".")[-1], text)
                 text = self.replace_placeholders(config, name, text)
             with open(f"{self.deployment_dir}/{name}/{template.split('/')[-1]}", "w") as f_out:
                 f_out.write(text)
-
-    def __strip_comments(self, extension, text):
-        if extension in ("yaml", "cfg"):
-            return "\n".join([l for l in text.split("\n") if l.strip()[:1] != "#"])
-        else:
-            return text
 
