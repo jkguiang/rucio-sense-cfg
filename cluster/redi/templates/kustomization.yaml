@@ -1,0 +1,22 @@
+resources:
+  - deploy.yaml
+
+configMapGenerator:
+  - name: NAME_PLACEHOLDER-conf
+    files:
+      - xrootd.cfg
+      - auth-file-noauth
+  - name: NAME_PLACEHOLDER-supervisor
+    files:
+      - supervisord.conf
+
+secretGenerator:
+- name: https-self-certs
+  files:
+    - OSG-Test-CA.pem
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+commonLabels:
+  app: NAME_PLACEHOLDER

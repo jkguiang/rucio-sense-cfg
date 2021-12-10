@@ -1,0 +1,24 @@
+FROM opensciencegrid/software-base:fresh
+
+RUN yum -y install vim && \
+    yum -y install gfal2-plugin-file gfal2-plugin-gridftp && \
+    yum -y install globus-gass-copy-progs && \
+    yum -y install xrootd-client
+
+RUN yum install gcc openssl-devel bzip2-devel libffi-devel -y && \
+    curl https://www.python.org/ftp/python/3.8.7/Python-3.8.7.tgz -o /tmp/py.tgz && \
+    cd /tmp && \
+    tar xzf py.tgz && \
+    cd Python-3.8.7 && \
+    ./configure --enable-optimizations && \
+    make altinstall && \
+    ln -s /usr/local/bin/python3.8 /usr/bin/python3
+
+RUN curl -O http://uaf-10.t2.ucsd.edu/~aaarora/packages/osg-ca-generator-1.5.0.tar.gz && \
+    tar -xvf osg-ca-generator-1.5.0.tar.gz && \
+    cd osg-ca-generator-1.5.0 && \
+    make install
+
+RUN python3.8 -m pip install aiomultiprocess && python3.8 -m pip install aiohttp && python3.8 -m pip install requests
+
+RUN adduser master

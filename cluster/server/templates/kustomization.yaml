@@ -1,0 +1,17 @@
+resources:
+  - deploy.yaml
+
+configMapGenerator:
+  - name: NAME_PLACEHOLDER-conf
+    files:
+      - xrootd.cfg
+      - auth-file-noauth
+  - name: NAME_PLACEHOLDER-supervisor
+    files:
+      - supervisord.conf
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+commonLabels:
+  app: NAME_PLACEHOLDER

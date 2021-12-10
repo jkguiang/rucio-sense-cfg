@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: NAME_PLACEHOLDER
+  name: NAME_PLACEHOLDER
+spec:
+  selector:
+    matchLabels:
+      k8s-app: NAME_PLACEHOLDER
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        k8s-app: NAME_PLACEHOLDER
+    spec:
+      # tolerations:
+      # - key: "nautilus.io/nsi"
+      #   operator: "Exists"
+      #   effect: "NoSchedule"
+      # - key: "node.kubernetes.io/unreachable"
+      #   operator: "Exists"
+      #   effect: "NoSchedule"
+      hostNetwork: True
+      containers:
+      - env:
+        - name: OSG_FQDN
+          value: VLAN_PLACEHOLDER
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: aaarora/gc-500gbps:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: REDI_PORT_PLACEHOLDER
+        - containerPort: MAIN_PORT_PLACEHOLDER
+        name: NAME_PLACEHOLDER
+        securityContext:
+          privileged: True
+        resources:
+          limits:
+            cpu: 20
+            memory: 20Gi
+          requests:
+            cpu: 2
+            memory: 2Gi
+        volumeMounts:
+        - mountPath: /mnt/ramdisk/
+          name: cache-vol
+        - mountPath: /etc/xrootd/xrootd.cfg
+          name: NAME_PLACEHOLDER-conf
+          subPath: xrootd.cfg
+        - mountPath: /etc/xrootd/auth-file-noauth
+          name: NAME_PLACEHOLDER-conf
+          subPath: auth-file-noauth
+        - mountPath: /etc/supervisord.d/10-xrootd.conf
+          name: NAME_PLACEHOLDER-supervisor
+          subPath: supervisord.conf
+        - mountPath: /etc/pki/CA/private/OSG-Test-CA.key
+          name: ca
+          subPath: OSG-Test-CA.pem
+      nodeSelector:
+        kubernetes.io/hostname: NODE_PLACEHOLDER
+      dnsPolicy: Default
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: cache-vol
+        emptyDir: {}
+      - name: ca
+        secret:
+          secretName: https-self-certs
+          items:
+          - key: OSG-Test-CA.pem
+            path: OSG-Test-CA.pem
+          defaultMode: 0644
+      - name: NAME_PLACEHOLDER-conf
+        configMap: 
+          name: NAME_PLACEHOLDER-conf
+          items:
+          - key: xrootd.cfg
+            path: xrootd.cfg
+          - key: auth-file-noauth
+            path: auth-file-noauth
+      - name: NAME_PLACEHOLDER-supervisor
+        configMap: 
+          name: NAME_PLACEHOLDER-supervisor
+          items:
+          - key: supervisord.conf
+            path: supervisord.conf
