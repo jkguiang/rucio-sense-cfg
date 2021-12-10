@@ -1,54 +1,19 @@
-import os
-import glob
-import subprocess
+import sys, os
+sys.path.append(os.getcwd()+"/..")
+from utils import DeploymentWriter
 
-def write_deployment(config, name, redi="", deployment_dir="deployments", template_dir="template"):
-    os.makedirs(f"{deployment_dir}/{name}", exist_ok=True)
-    for template in glob.glob(f"{template_dir}/*"):
-        with open(template, "r") as f_in:
-            text = f_in.read()
-            if template.split(".")[-1] in ("yaml", "cfg"):
-                # Strip comments from templates
-                text = "\n".join([l for l in text.split("\n") if l.strip()[:1] != "#"])
-            # Replace placeholders
-            text = text.replace("NODE_PLACEHOLDER", config["node"])
-            text = text.replace("NAME_PLACEHOLDER", name)
-            text = text.replace("REDI_PLACEHOLDER", config["redi"])
-            text = text.replace("INTF_PLACEHOLDER", config["interface"])
-            text = text.replace("PORT_PLACEHOLDER", config["port"])
-            text = text.replace("VLAN_PLACEHOLDER", config["vlan"])
-        with open(f"{deployment_dir}/{name}/{template.split('/')[-1]}", "w") as f_out:
-            f_out.write(text)
+class ServerDeploymentWriter(DeploymentWriter):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-def write_deployments(configs, base_dir="servers", template_dir="template", server_name="origin", redi_name=""):
-    os.makedirs(base_dir, exist_ok=True)
-    deployment_dir = f"{base_dir}/deployments"
-    for old_deployment in __get_deployments(deployment_dir):
-        for f in glob.glob(f"{old_deployment}/*"):
-            os.remove(f)
-        os.rmdir(old_deployment)
-
-    for i, config in enumerate(configs):
-        N = config["node"].split(".")[0].split("-")[-1]
-        write_deployment(
-            config, 
-            f"{server_name}-{N}-{config['interface'].replace('.', '-')}", 
-            deployment_dir=deployment_dir,
-            template_dir=template_dir
-        )
-
-    with open(f"{base_dir}/Makefile", "w") as f_out:
-        f_out.write("delete:\n")
-        for new_deployment in __get_deployments(deployment_dir):
-            local_path = new_deployment.replace(f"{base_dir}/", "")
-            f_out.write(f"\t- kubectl delete -k ./{local_path}\n")
-        f_out.write("create:\n")
-        for new_deployment in __get_deployments(deployment_dir):
-            local_path = new_deployment.replace(f"{base_dir}/", "")
-            f_out.write(f"\t- kubectl apply -k ./{local_path}\n")
-
-def __get_deployments(deployment_dir="deployments"):
-    return [d for d in glob.glob(f"{deployment_dir}/*")]
+    def replace_placeholders(self, config, name, text):
+        text = text.replace("NODE_PLACEHOLDER", config["node"])
+        text = text.replace("NAME_PLACEHOLDER", name)
+        text = text.replace("REDI_PLACEHOLDER", config["redi"])
+        text = text.replace("INTF_PLACEHOLDER", config["interface"])
+        text = text.replace("PORT_PLACEHOLDER", config["port"])
+        text = text.replace("VLAN_PLACEHOLDER", config["vlan"])
+        return text
 
 if __name__ == "__main__":
     server_configs = [
@@ -67,4 +32,10 @@ if __name__ == "__main__":
             "redi": "[2607:f720:1720:e00e:ec4:7aff:febb:c04f]:9002"
         }, 
     ]
-    write_deployments(server_configs, base_dir="servers", template_dir="templates", server_name="rucio-sense-server")
+    deployment_writer = ServerDeploymentWriter(
+        base_dir="servers", 
+        template_dir="templates", 
+        app_name="rucio-sense-server", 
+        configs=server_configs
+    )
+    deployment_writer.write()
