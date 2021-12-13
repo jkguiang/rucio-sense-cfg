@@ -54,7 +54,7 @@ spec:
         volumeMounts:
         - mountPath: /etc/xrootd/xrootd.cfg
           name: NAME_PLACEHOLDER-conf
-          subPath: xrootd-third.cfg
+          subPath: xrootd.cfg
         - mountPath: /etc/xrootd/auth-file-noauth
           name: NAME_PLACEHOLDER-conf
           subPath: auth-file-noauth
