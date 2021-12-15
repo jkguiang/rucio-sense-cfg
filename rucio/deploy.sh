@@ -130,7 +130,7 @@ SERVER_NAME=cms-rucio-${INSTANCE}
 DAEMON_NAME=cms-ruciod-${INSTANCE}
 
 echo "Installing Rucio helm charts..."
-# helm install $SERVER_NAME --values rucio-server-values.yaml rucio/rucio-server
+helm install $SERVER_NAME --values rucio-server-values.yaml rucio/rucio-server
 helm install $DAEMON_NAME --values rucio-daemons-values.yaml rucio/rucio-daemons
 
 # Create a job NOW to start setting the proxies.
