@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: osg-ca-gen
+  name: osg-ca-gen
+spec:
+  selector:
+    matchLabels:
+      k8s-app: osg-ca-gen
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        k8s-app: osg-ca-gen
+    spec:
+      hostNetwork: true
+      containers:
+      - env:
+        - name: OSG_FQDN
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: aaarora/gc-500gbps:latest
+        imagePullPolicy: Always
+        name: osg-ca-gen
+        resources:
+          limits:
+            cpu: 2
+            memory: 2Gi
+          requests:
+            cpu: 1
+            memory: 1Gi
+        volumeMounts:
+        - mountPath: /etc/pki/CA/private/OSG-Test-CA.key
+          name: ca
+          subPath: OSG-Test-CA.pem
+      dnsPolicy: ClusterFirstWithHostNet
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: ca
+        secret:
+          secretName: osg-ca-gen-self-certs
+          items:
+          - key: OSG-Test-CA.pem
+            path: OSG-Test-CA.pem
+          defaultMode: 0644

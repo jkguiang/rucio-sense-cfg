@@ -1,0 +1,20 @@
+conveyorPreparerCount: 1
+conveyorThrottlerCount: 1
+conveyorTransferSubmitterCount: 1
+conveyorPollerCount: 1
+conveyorFinisherCount: 1
+
+image:
+  repository: rucio/rucio-daemons
+  tag: release-1.27.1
+  pullPolicy: IfNotPresent
+
+ftsRenewal:
+  enabled: 1
+  image:
+    repository: rucio/fts-cron
+    tag: latest
+    pullPolicy: Always
+  vo: "cms"
+  voms: "cms:/cms/Role=production"
+  servers: "https://fts3-devel.cern.ch:8446,https://fts3-pilot.cern.ch:8446"

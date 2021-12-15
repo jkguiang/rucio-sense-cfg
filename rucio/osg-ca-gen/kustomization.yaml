@@ -1,0 +1,10 @@
+resources:
+  - deploy.yaml
+
+secretgenerator:
+  - name: osg-ca-gen-self-certs
+    files:
+      - OSG-Test-CA.pem
+
+generatoroptions:
+  disablenamesuffixhash: true
