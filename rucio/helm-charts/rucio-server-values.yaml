@@ -1,0 +1,23 @@
+image:
+  repository: rucio/rucio-server
+  tag: release-1.27.1
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+authReplicaCount: 1
+traceReplicaCount: 1
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/frontend-entry-points: http, https
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  # hosts:
+  #   - cms-rucio-dev.cern.ch
+  tls:
+    - secretName: rucio-server.tls-secret
+
+config:
+    conveyor:
+        use_preparer: "True"
