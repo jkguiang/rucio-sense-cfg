@@ -28,6 +28,6 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        context: docker
+        context: sense
         file: sense/Dockerfile
         tags: jguiang/nonsense:latest
