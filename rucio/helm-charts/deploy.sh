@@ -91,6 +91,7 @@ echo "Removing existing secrets..."
 kubectl delete secret rucio-server.tls-secret
 kubectl delete secret ${DAEMON_NAME}-fts-cert ${DAEMON_NAME}-fts-key
 kubectl delete secret ${DAEMON_NAME}-rucio-ca-bundle
+kubectl delete secret ${DAEMON_NAME}-rucio-x509up
 kubectl delete secret ${SERVER_NAME}-rucio-ca-bundle 
 kubectl delete secret ${SERVER_NAME}-hostcert ${SERVER_NAME}-hostkey ${SERVER_NAME}-cafile  
 kubectl delete secret ${SERVER_NAME}-auth-hostcert ${SERVER_NAME}-auth-hostkey ${SERVER_NAME}-auth-cafile  
@@ -131,8 +132,8 @@ DAEMON_NAME=cms-ruciod-${INSTANCE}
 
 echo "Installing Rucio helm charts..."
 helm install $SERVER_NAME --values rucio-server-values.yaml rucio/rucio-server
-helm install $DAEMON_NAME --values rucio-daemons-values.yaml rucio/rucio-daemons
+# helm install $DAEMON_NAME --values rucio-daemons-values.yaml rucio/rucio-daemons
 
 # Create a job NOW to start setting the proxies.
-kubectl delete job --ignore-not-found=true fts
-kubectl create job --from=cronjob/${DAEMON_NAME}-renew-fts-proxy fts
+# kubectl delete job --ignore-not-found=true fts
+# kubectl create job --from=cronjob/${DAEMON_NAME}-renew-fts-proxy fts

@@ -1,0 +1,8 @@
+resources:
+  - deploy.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+commonLabels:
+  app: nonsense
