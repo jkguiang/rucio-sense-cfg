@@ -5,15 +5,19 @@ configMapGenerator:
   - name: NAME_PLACEHOLDER-conf
     files:
       - xrootd.cfg
-      - auth-file-noauth
+      - grid-mapfile
+      - auth-file
+      - 5fca1cb1.0
+      - 5fca1cb1.signing_policy
   - name: NAME_PLACEHOLDER-supervisor
     files:
       - supervisord.conf
 
 secretGenerator:
-- name: https-self-certs
-  files:
-    - OSG-Test-CA.pem
+  - name: NAME_PLACEHOLDER-self-certs
+    files:
+      - hostcert.pem
+      - hostcert.key.pem
 
 generatorOptions:
   disableNameSuffixHash: true
