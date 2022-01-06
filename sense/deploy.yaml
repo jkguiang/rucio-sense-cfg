@@ -20,13 +20,6 @@ spec:
       labels:
         k8s-app: nonsense
     spec:
-      # tolerations:
-      # - key: "nautilus.io/nsi"
-      #   operator: "Exists"
-      #   effect: "NoSchedule"
-      # - key: "node.kubernetes.io/unreachable"
-      #   operator: "Exists"
-      #   effect: "NoSchedule"
       hostNetwork: True
       containers:
         - image: jguiang/nonsense:latest
@@ -50,10 +43,7 @@ spec:
               cpu: 1
               memory: 2Gi
       nodeSelector:
-        # kubernetes.io/hostname: k8s-gen4-01.sdsc.optiputer.net
-        # kubernetes.io/hostname: k8s-gen4-07.ultralight.org
-        # kubernetes.io/hostname: dtn138.sl.startap.net
-        # kubernetes.io/hostname: nrp-02.nrp-nautilus.io
+        kubernetes.io/hostname: river-c032.ssl-hep.org
       dnsPolicy: Default
       restartPolicy: Always
       schedulerName: default-scheduler
