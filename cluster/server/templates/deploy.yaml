@@ -46,7 +46,7 @@ spec:
               memory: 4Gi
           volumeMounts:
             - mountPath: /rucio
-              name: hosttmp
+              name: cache-volume
             - mountPath: /etc/xrootd/xrootd.cfg
               name: conf
               subPath: xrootd.cfg
@@ -78,10 +78,8 @@ spec:
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30
       volumes:
-        - name: hosttmp
-          hostPath:
-            path: /tmp
-            type: Directory
+        - name: cache-volume
+          emptyDir: {}
         - name: certs
           secret:
             secretName: NAME_PLACEHOLDER-self-certs
