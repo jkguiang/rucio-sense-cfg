@@ -7,7 +7,8 @@ The `helm-charts` integration is non-operational at the time of writing, but is 
 
 2. Clone our fork of the Rucio repository
 ```
-etc/docker/dev/git clone git@github.com:aaarora/rucio.git docker
+etc/docker/dev/git clone -b throttler git@github.com:aaarora/rucio.git docker
+cd docker
 ```
 
 3. Launch the containers
