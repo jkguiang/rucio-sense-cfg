@@ -17,6 +17,10 @@ class ServerDeploymentWriter(DeploymentWriter):
         text = text.replace("VLAN_PLACEHOLDER", config["vlan"])
         return text
 
+    def _get_deployment_name(self, config):
+        N = config["node"].split(".")[0].split("-")[-1]
+        return f"{self.app_name}-{N}-{config['port'].replace('.', '-')}"
+
     def make_certs(self):
         if len(self._get_deployments()) == 0:
             print("WARNING: No certs made; run write() first!")
@@ -30,18 +34,18 @@ if __name__ == "__main__":
     server_configs = [
         {
             "node": "nrp-01.nrp-nautilus.io", 
-            "vlan": "2607:f720:1720:e00e:ec4:7aff:febb:c170",
+            "vlan": "2607:f720:1720:e00e:ec4:7aff:febb:c171",
             "port": "2094",
-            "interface": "enp2s0f0",
-            "redi_vlan": "2607:f720:1720:e00e:ec4:7aff:febb:c04e",
+            "interface": "enp2s0f1",
+            "redi_vlan": "2607:f720:1720:e00e:ec4:7aff:febb:c04f",
             "redi_port": "9001"
         }, 
         {
             "node": "nrp-01.nrp-nautilus.io", 
-            "vlan": "2607:f720:1720:e00e:ec4:7aff:febb:c171",
+            "vlan": "2607:f720:1720:e00e:ec4:7aff:febb:c173",
             "port": "2095",
             "interface": "enp2s0f1",
-            "redi_vlan": "2607:f720:1720:e00e:ec4:7aff:febb:c04f",
+            "redi_vlan": "2607:f720:1720:e00e:ec4:7aff:febb:c050",
             "redi_port": "9002"
         }, 
     ]
