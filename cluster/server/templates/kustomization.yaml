@@ -9,6 +9,7 @@ configMapGenerator:
       - auth-file
       - 5fca1cb1.0
       - 5fca1cb1.signing_policy
+      - test.file
   - name: NAME_PLACEHOLDER-supervisor
     files:
       - supervisord.conf

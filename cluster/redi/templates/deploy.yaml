@@ -23,7 +23,7 @@ spec:
       containers:
         - env:
           - name: OSG_FQDN
-            value: VLAN_PLACEHOLDER
+            value: IPV6_PLACEHOLDER
           - name: POD_NAME
             valueFrom:
               fieldRef:
