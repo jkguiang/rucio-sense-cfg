@@ -1,0 +1,4 @@
+[submodule "rucio/docker"]
+	path = rucio/docker
+	url = https://github.com/aaarora/rucio
+	branch = throttler
