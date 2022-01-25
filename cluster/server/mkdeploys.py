@@ -16,6 +16,7 @@ class ServerDeploymentWriter(DeploymentWriter):
         text = text.replace("INTF_PLACEHOLDER", config["interface"])
         text = text.replace("PORT_PLACEHOLDER", config["port"])
         text = text.replace("IPV6_PLACEHOLDER", config["ipv6"])
+        text = text.replace("HOST_DIR_PLACEHOLDER", config["host_dir"])
         return text
 
     def _get_deployment_name(self, config):
@@ -37,13 +38,15 @@ class ServerDeploymentWriter(DeploymentWriter):
 
 if __name__ == "__main__":
     server_configs = [
+        # Cluster 1
         {
             "node": "nrp-02.nrp-nautilus.io", 
             "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c050",
             "port": "2094",
             "interface": "macvlan0",
             "redi_ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c171",
-            "redi_port": "9001"
+            "redi_port": "9001",
+            "host_dir": "/tmp"
         }, 
         {
             "node": "nrp-02.nrp-nautilus.io", 
@@ -51,7 +54,8 @@ if __name__ == "__main__":
             "port": "2095",
             "interface": "macvlan1",
             "redi_ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c172",
-            "redi_port": "9002"
+            "redi_port": "9002",
+            "host_dir": "/tmp"
         }, 
         {
             "node": "nrp-02.nrp-nautilus.io", 
@@ -59,7 +63,36 @@ if __name__ == "__main__":
             "port": "2096",
             "interface": "macvlan2",
             "redi_ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c173",
-            "redi_port": "9003"
+            "redi_port": "9003",
+            "host_dir": "/tmp"
+        }, 
+        # Cluster 2
+        {
+            "node": "nrp-04.nrp-nautilus.io", 
+            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c58a",
+            "port": "2094",
+            "interface": "macvlan0",
+            "redi_ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c04d",
+            "redi_port": "9001",
+            "host_dir": "/tmp"
+        }, 
+        {
+            "node": "nrp-04.nrp-nautilus.io", 
+            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c58b",
+            "port": "2095",
+            "interface": "macvlan1",
+            "redi_ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c04e",
+            "redi_port": "9002",
+            "host_dir": "/tmp"
+        }, 
+        {
+            "node": "nrp-04.nrp-nautilus.io", 
+            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c58c",
+            "port": "2096",
+            "interface": "macvlan2",
+            "redi_ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c04f",
+            "redi_port": "9003",
+            "host_dir": "/tmp"
         }, 
     ]
     deployment_writer = ServerDeploymentWriter(

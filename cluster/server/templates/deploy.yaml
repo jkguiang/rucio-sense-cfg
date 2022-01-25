@@ -47,7 +47,7 @@ spec:
           volumeMounts:
             - mountPath: /rucio
               name: cache-volume
-            - mountPath: /rucio/test.file
+            - mountPath: /rucio/SITE_PLACEHOLDER.file
               name: conf
               subPath: test.file
             - mountPath: /etc/xrootd/xrootd.cfg
@@ -82,7 +82,9 @@ spec:
       terminationGracePeriodSeconds: 30
       volumes:
         - name: cache-volume
-          emptyDir: {}
+          hostPath:
+            path: HOST_DIR_PLACEHOLDER
+            type: Directory
         - name: certs
           secret:
             secretName: NAME_PLACEHOLDER-self-certs

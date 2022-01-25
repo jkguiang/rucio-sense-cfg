@@ -36,6 +36,7 @@ class RediDeploymentWriter(DeploymentWriter):
 
 if __name__ == "__main__":
     redi_configs = [
+        # Cluster 1
         {
             "node": "nrp-01.nrp-nautilus.io", 
             "main_port": "2094",
@@ -56,6 +57,28 @@ if __name__ == "__main__":
             "redi_port": "9003",
             "interface": "macvlan2",
             "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c173",
+        }, 
+        # Cluster 2
+        {
+            "node": "nrp-03.nrp-nautilus.io", 
+            "main_port": "2094",
+            "redi_port": "9001",
+            "interface": "macvlan0",
+            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c04d",
+        }, 
+        {
+            "node": "nrp-03.nrp-nautilus.io", 
+            "main_port": "2095",
+            "redi_port": "9002",
+            "interface": "macvlan1",
+            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c04e",
+        }, 
+        {
+            "node": "nrp-03.nrp-nautilus.io", 
+            "main_port": "2096",
+            "redi_port": "9003",
+            "interface": "macvlan2",
+            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c04f",
         }, 
     ]
     deployment_writer = RediDeploymentWriter(
