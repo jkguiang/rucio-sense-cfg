@@ -39,7 +39,7 @@ def submitter_handler(payload, cache):
     return transfer_data["sense_map"]
 
 def finisher_handler(payload, cache):
-    for priority, updated_jobs in request.json.items():
+    for priority, updated_jobs in payload.items():
         active_jobs = cache[priority]
         for rse_pair_id, updated_data in updated_jobs.items():
             transfer_data = active_jobs[rse_pair_id]
