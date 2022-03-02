@@ -49,21 +49,6 @@ spec:
             - mountPath: /etc/xrootd/xrootd.cfg
               name: conf
               subPath: xrootd.cfg
-            - mountPath: /etc/xrootd/auth-file
-              name: conf
-              subPath: auth-file
-            - mountPath: /etc/supervisord.d/10-xrootd.conf
-              name: supervisor
-              subPath: supervisord.conf
-            - mountPath: /etc/grid-security/grid-mapfile
-              name: conf
-              subPath: grid-mapfile
-            - mountPath: /etc/grid-security/certificates/5fca1cb1.0
-              name: conf
-              subPath: 5fca1cb1.0
-            - mountPath: /etc/grid-security/certificates/5fca1cb1.signing_policy
-              name: conf
-              subPath: 5fca1cb1.signing_policy
             - mountPath: /etc/grid-security/hostcert.pem
               name: certs
               subPath: hostcert.pem
@@ -94,14 +79,6 @@ spec:
             items:
               - key: xrootd.cfg
                 path: xrootd.cfg
-              - key: grid-mapfile
-                path: grid-mapfile
-              - key: auth-file
-                path: auth-file
-              - key: 5fca1cb1.0
-                path: 5fca1cb1.0
-              - key: 5fca1cb1.signing_policy
-                path: 5fca1cb1.signing_policy
         - name: supervisor
           configMap: 
             name: NAME_PLACEHOLDER-supervisor
