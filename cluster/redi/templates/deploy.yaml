@@ -28,7 +28,7 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.name
-          image: jguiang/us-cms-datalake-cluster:latest
+          image: jguiang/rucio-sense-xrootd:latest
           imagePullPolicy: Always
           ports:
             - containerPort: MAIN_PORT_PLACEHOLDER
