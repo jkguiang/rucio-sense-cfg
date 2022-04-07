@@ -17,3 +17,25 @@ One solution is to manually change the routing tables such that each origin rout
 ```
 route -A inet6 add <REDIRECTOR_IP>/128 dev macvlan1
 ```
+
+## Configured VLANs on `nrp-dev`
+```
+16 /64's , active with the ::1 address on the SN3700:
+2001:48d0:fff:990::2/127, Vlan990
+2001:48d0:3001:110::/64, Vlan4070
+2001:48d0:3001:111::/64, Vlan4071
+2001:48d0:3001:112::/64, Vlan4072
+2001:48d0:3001:113::/64, Vlan4073
+2001:48d0:3001:114::/64, Vlan4074
+2001:48d0:3001:115::/64, Vlan4075
+2001:48d0:3001:116::/64, Vlan4076
+2001:48d0:3001:117::/64, Vlan4077
+2001:48d0:3001:118::/64, Vlan4078
+2001:48d0:3001:119::/64, Vlan4079
+2001:48d0:3001:11a::/64, Vlan4080
+2001:48d0:3001:11b::/64, Vlan4081
+2001:48d0:3001:11c::/64, Vlan4082
+2001:48d0:3001:11d::/64, Vlan4083
+2001:48d0:3001:11e::/64, Vlan4084
+2001:48d0:3001:11f::/64, Vlan408
+```
