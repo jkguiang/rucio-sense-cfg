@@ -41,56 +41,56 @@ if __name__ == "__main__":
         # Cluster 1
         {
             "node": "nrp-02.nrp-nautilus.io", 
-            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c050",
+            "ipv6": "2001:48d0:3001:112::2",
             "port": "2094",
             "interface": "macvlan0",
-            "redi_ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c171",
+            "redi_ipv6": "2001:48d0:3001:111::2",
             "redi_port": "9001",
             "host_dir": "/tmp"
         }, 
         {
             "node": "nrp-02.nrp-nautilus.io", 
-            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c051",
+            "ipv6": "2001:48d0:3001:112::3",
             "port": "2095",
             "interface": "macvlan1",
-            "redi_ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c172",
+            "redi_ipv6": "2001:48d0:3001:111::3",
             "redi_port": "9002",
             "host_dir": "/tmp"
         }, 
         {
             "node": "nrp-02.nrp-nautilus.io", 
-            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c052",
+            "ipv6": "2001:48d0:3001:112::4",
             "port": "2096",
             "interface": "macvlan2",
-            "redi_ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c173",
+            "redi_ipv6": "2001:48d0:3001:111::4",
             "redi_port": "9003",
             "host_dir": "/tmp"
         }, 
         # Cluster 2
         {
             "node": "nrp-04.nrp-nautilus.io", 
-            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c58a",
+            "ipv6": "2001:48d0:3001:114::2",
             "port": "2094",
             "interface": "macvlan0",
-            "redi_ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c04d",
+            "redi_ipv6": "2001:48d0:3001:113::2",
             "redi_port": "9001",
             "host_dir": "/tmp"
         }, 
         {
             "node": "nrp-04.nrp-nautilus.io", 
-            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c58b",
+            "ipv6": "2001:48d0:3001:114::3",
             "port": "2095",
             "interface": "macvlan1",
-            "redi_ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c04e",
+            "redi_ipv6": "2001:48d0:3001:113::3",
             "redi_port": "9002",
             "host_dir": "/tmp"
         }, 
         {
             "node": "nrp-04.nrp-nautilus.io", 
-            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c58c",
+            "ipv6": "2001:48d0:3001:114::4",
             "port": "2096",
             "interface": "macvlan2",
-            "redi_ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c04f",
+            "redi_ipv6": "2001:48d0:3001:113::4",
             "redi_port": "9003",
             "host_dir": "/tmp"
         }, 

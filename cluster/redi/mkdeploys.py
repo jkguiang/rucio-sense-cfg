@@ -42,21 +42,21 @@ if __name__ == "__main__":
             "main_port": "2094",
             "redi_port": "9001",
             "interface": "macvlan0",
-            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c171",
+            "ipv6": "2001:48d0:3001:111::2",
         }, 
         {
             "node": "nrp-01.nrp-nautilus.io", 
             "main_port": "2095",
             "redi_port": "9002",
             "interface": "macvlan1",
-            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c172",
+            "ipv6": "2001:48d0:3001:111::3",
         }, 
         {
             "node": "nrp-01.nrp-nautilus.io", 
             "main_port": "2096",
             "redi_port": "9003",
             "interface": "macvlan2",
-            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c173",
+            "ipv6": "2001:48d0:3001:111::4",
         }, 
         # Cluster 2
         {
@@ -64,21 +64,21 @@ if __name__ == "__main__":
             "main_port": "2094",
             "redi_port": "9001",
             "interface": "macvlan0",
-            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c04d",
+            "ipv6": "2001:48d0:3001:113::2",
         }, 
         {
             "node": "nrp-03.nrp-nautilus.io", 
             "main_port": "2095",
             "redi_port": "9002",
             "interface": "macvlan1",
-            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c04e",
+            "ipv6": "2001:48d0:3001:113::3",
         }, 
         {
             "node": "nrp-03.nrp-nautilus.io", 
             "main_port": "2096",
             "redi_port": "9003",
             "interface": "macvlan2",
-            "ipv6": "2607:f720:1720:e00e:ec4:7aff:febb:c04f",
+            "ipv6": "2001:48d0:3001:113::4",
         }, 
     ]
     deployment_writer = RediDeploymentWriter(

@@ -59,6 +59,9 @@ spec:
             - mountPath: /etc/grid-security/hostkey.pem
               name: certs
               subPath: hostcert.key.pem
+            - mountPath: /etc/supervisord.d/10-xrootd.conf
+              name: supervisor
+              subPath: supervisord.conf
       nodeSelector:
         kubernetes.io/hostname: NODE_PLACEHOLDER
       dnsPolicy: Default
