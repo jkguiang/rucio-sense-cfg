@@ -47,4 +47,6 @@ Before running these scripts, you must first set the environment variable `RUCIO
 ```
 export RUCIO_KEY_PASSWORD=123456 # replace 123456 with your password
 ```
+You must have also generated the Rucio CA/certs [here](https://github.com/aaarora/rucio/tree/master/etc/certs) with that same password.
+Finally, you must also copy the private key used to create the Rucio CA to `certs/rucio_ca.key.pem`.
 Then, once you've edited your configs appropriately, you can create the Kubernetes deployment yamls and run `make deploy`.
