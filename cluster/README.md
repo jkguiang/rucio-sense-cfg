@@ -37,5 +37,14 @@ route -A inet6 add <REDIRECTOR_IP>/128 dev macvlan1
 2001:48d0:3001:11c::/64, Vlan4082
 2001:48d0:3001:11d::/64, Vlan4083
 2001:48d0:3001:11e::/64, Vlan4084
-2001:48d0:3001:11f::/64, Vlan408
+2001:48d0:3001:11f::/64, Vlan4085
 ```
+
+# Cluster Deployment
+
+Kubernetes deployment yamls for the Rucio-SENSE XRootD cluster are automatically created by the `mkdeploy.py` script in the redi (redirector) and server (origin) directories.
+Before running these scripts, you must first set the environment variable `RUCIO_KEY_PASSWORD` to the password used to generate the prive key for the Rucio CA; i.e.
+```
+export RUCIO_KEY_PASSWORD=123456 # replace 123456 with your password
+```
+Then, once you've edited your configs appropriately, you can create the Kubernetes deployment yamls and run `make deploy`.
