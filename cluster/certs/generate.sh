@@ -1,4 +1,6 @@
 #!/bin/bash
+export RUCIO_KEY_PASSWORD=123456
+
 HOSTNAME=$1 # IPv6 address (no brackets, no capitals)
 BASEDIR=$2
 
