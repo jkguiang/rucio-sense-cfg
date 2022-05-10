@@ -46,7 +46,7 @@ spec:
               memory: 4Gi
           volumeMounts:
             - mountPath: /rucio
-              name: cache-volume
+              name: storage-volume
             - mountPath: /rucio/SITE_PLACEHOLDER.file
               name: conf
               subPath: test.file
@@ -69,10 +69,9 @@ spec:
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30
       volumes:
-        - name: cache-volume
-          hostPath:
-            path: HOST_DIR_PLACEHOLDER
-            type: Directory
+        - name: storage-volume
+          persistentVolumeClaim:
+            claimName: rucio-sense-xrd-vol
         - name: certs
           secret:
             secretName: NAME_PLACEHOLDER-self-certs

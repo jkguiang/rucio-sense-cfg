@@ -16,7 +16,6 @@ class ServerDeploymentWriter(DeploymentWriter):
         text = text.replace("INTF_PLACEHOLDER", config["interface"])
         text = text.replace("PORT_PLACEHOLDER", config["port"])
         text = text.replace("IPV6_PLACEHOLDER", config["ipv6"])
-        text = text.replace("HOST_DIR_PLACEHOLDER", config["host_dir"])
         return text
 
     def _get_deployment_name(self, config):
@@ -46,7 +45,6 @@ if __name__ == "__main__":
             "interface": "macvlan0",
             "redi_ipv6": "2001:48d0:3001:111::200",
             "redi_port": "9001",
-            "host_dir": "/tmp"
         }, 
         {
             "node": "nrp-02.nrp-nautilus.io", 
@@ -55,7 +53,6 @@ if __name__ == "__main__":
             "interface": "macvlan1",
             "redi_ipv6": "2001:48d0:3001:112::200",
             "redi_port": "9002",
-            "host_dir": "/tmp"
         }, 
         {
             "node": "nrp-02.nrp-nautilus.io", 
@@ -64,7 +61,6 @@ if __name__ == "__main__":
             "interface": "macvlan2",
             "redi_ipv6": "2001:48d0:3001:113::200",
             "redi_port": "9003",
-            "host_dir": "/tmp"
         }, 
     ]
     deployment_writer = ServerDeploymentWriter(
