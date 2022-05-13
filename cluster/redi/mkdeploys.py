@@ -39,22 +39,22 @@ if __name__ == "__main__":
         # Cluster 1
         {
             "node": "nrp-01.nrp-nautilus.io", 
-            "main_port": "2094",
-            "redi_port": "9001",
+            "main_port": "1094",
+            "redi_port": "1213",
             "interface": "macvlan0",
             "ipv6": "2001:48d0:3001:111::200",
         }, 
         {
             "node": "nrp-01.nrp-nautilus.io", 
-            "main_port": "2095",
-            "redi_port": "9002",
+            "main_port": "1095",
+            "redi_port": "1214",
             "interface": "macvlan1",
             "ipv6": "2001:48d0:3001:112::200",
         }, 
         {
             "node": "nrp-01.nrp-nautilus.io", 
-            "main_port": "2096",
-            "redi_port": "9003",
+            "main_port": "1096",
+            "redi_port": "1215",
             "interface": "macvlan2",
             "ipv6": "2001:48d0:3001:113::200",
         }, 

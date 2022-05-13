@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: tpc-master
+  name: tpc-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: tpc-master
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        k8s-app: tpc-master
+    spec:
+      containers:
+      - image: aaarora/tpc-master-xrootd:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        name: tpc-master
+        resources:
+          limits:
+            cpu: 100
+            memory: 100Gi
+          requests:
+            cpu: 8
+            memory: 8Gi
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: cache-vol
+        emptyDir: {}

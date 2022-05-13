@@ -41,26 +41,26 @@ if __name__ == "__main__":
         {
             "node": "nrp-02.nrp-nautilus.io", 
             "ipv6": "2001:48d0:3001:111::300",
-            "port": "2094",
+            "port": "1094",
             "interface": "macvlan0",
             "redi_ipv6": "2001:48d0:3001:111::200",
-            "redi_port": "9001",
+            "redi_port": "1213",
         }, 
         {
             "node": "nrp-02.nrp-nautilus.io", 
             "ipv6": "2001:48d0:3001:112::300",
-            "port": "2095",
+            "port": "1095",
             "interface": "macvlan1",
             "redi_ipv6": "2001:48d0:3001:112::200",
-            "redi_port": "9002",
+            "redi_port": "1214",
         }, 
         {
             "node": "nrp-02.nrp-nautilus.io", 
             "ipv6": "2001:48d0:3001:113::300",
-            "port": "2096",
+            "port": "1096",
             "interface": "macvlan2",
             "redi_ipv6": "2001:48d0:3001:113::200",
-            "redi_port": "9003",
+            "redi_port": "1215",
         }, 
     ]
     deployment_writer = ServerDeploymentWriter(
