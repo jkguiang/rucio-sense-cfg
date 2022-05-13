@@ -16,10 +16,8 @@ class TransferScheduler:
         for num in range(self.numTransfers):
             logging.debug(f"Added {num}/{self.numTransfers} transfers to queue")
             cmd = ['gfal-copy' , '-f']
-            cmd += ['-E', '/home/tpc/usercert.pem']
-            cmd += ['--key', '/home/tpc/userkey.pem']
             cmd += [f'https://{self.source}/testSourceFile{num}']
-            cmd += [f'https://{self.destination}/testDestFile{num}_{transferID}']
+            cmd += [f'https://{self.destination}/testDestFile{num}_{self.transferID}']
             yield cmd
         logging.info("Queue built successfully")
 
@@ -37,8 +35,8 @@ class TransferScheduler:
 
         logging.info("Starting Transfers")
         async with Pool(processes=2) as pool:
-                await pool.map(self.worker, queue)
+            await pool.map(self.worker, queue)
 
     def startTransfers(self) -> None:
-        print("Running Transfers...")
+        print(f"Running {self.numTransfers} {self.source} --> {self.destination} transfers...")
         asyncio.run(self.runTransfers())

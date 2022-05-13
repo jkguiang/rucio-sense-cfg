@@ -21,22 +21,86 @@ spec:
         k8s-app: tpc-master
     spec:
       containers:
-      - image: aaarora/tpc-master-xrootd:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-        name: tpc-master
-        resources:
-          limits:
-            cpu: 100
-            memory: 100Gi
-          requests:
-            cpu: 8
-            memory: 8Gi
+        - image: aaarora/tpc-master-xrootd:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          name: tpc-master
+          env:
+            - name: X509_USER_CERT
+              value: /etc/grid-security/usercert.pem
+            - name: X509_USER_KEY
+              value: /etc/grid-security/userkey.pem
+          resources:
+            limits:
+              cpu: 100
+              memory: 100Gi
+            requests:
+              cpu: 8
+              memory: 8Gi
+          volumeMounts:
+            - mountPath: /etc/grid-security/usercert.pem
+              name: certs
+              subPath: usercert.pem
+            - mountPath: /etc/grid-security/userkey.pem
+              name: certs
+              subPath: usercert.key.pem
+            - mountPath: /home/setup.sh
+              name: scripts
+              subPath: setup.sh
+            - mountPath: /home/cleanup.sh
+              name: scripts
+              subPath: cleanup.sh
+            - mountPath: /home/main.py
+              name: scripts
+              subPath: main.py
+            - mountPath: /home/scheduler.py
+              name: scripts
+              subPath: scheduler.py
+            - mountPath: /home/utils.py
+              name: scripts
+              subPath: utils.py
+            - mountPath: /etc/grid-security/certificates/5fca1cb1.0
+              name: rucio-ca
+              subPath: 5fca1cb1.0
+            - mountPath: /etc/grid-security/certificates/5fca1cb1.signing_policy
+              name: rucio-ca
+              subPath: 5fca1cb1.signing_policy
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30
       volumes:
-      - name: cache-vol
-        emptyDir: {}
+        - name: cache-vol
+          emptyDir: {}
+        - name: certs
+          secret:
+            secretName: tpc-master-self-certs
+            items:
+              - key: usercert.pem
+                path: usercert.pem
+              - key: usercert.key.pem
+                path: usercert.key.pem
+            defaultMode: 0644
+        - name: scripts
+          configMap: 
+            name: tpc-master-scripts
+            items:
+              - key: setup.sh
+                path: setup.sh
+              - key: cleanup.sh
+                path: cleanup.sh
+              - key: main.py
+                path: main.py
+              - key: scheduler.py
+                path: scheduler.py
+              - key: utils.py
+                path: utils.py
+        - name: rucio-ca
+          configMap: 
+            name: tpc-master-rucio-ca
+            items:
+              - key: 5fca1cb1.0
+                path: 5fca1cb1.0
+              - key: 5fca1cb1.signing_policy
+                path: 5fca1cb1.signing_policy

@@ -1,6 +1,25 @@
 resources:
   - deploy.yaml
 
+configMapGenerator:
+  - name: tpc-master-scripts
+    files:
+      - setup.sh
+      - cleanup.sh
+      - main.py
+      - scheduler.py
+      - utils.py
+  - name: tpc-master-rucio-ca
+    files:
+      - 5fca1cb1.0
+      - 5fca1cb1.signing_policy
+
+secretGenerator:
+  - name: tpc-master-self-certs
+    files:
+      - usercert.pem
+      - usercert.key.pem
+
 generatorOptions:
   disableNameSuffixHash: true
 
