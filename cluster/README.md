@@ -2,13 +2,18 @@
 
 XRootD binds to the interface defined in the `xrd.network` directive in the configuration. Under the constraint of limited physical NICs, spawning N instances of XRootD on the same host using different IPv6s, N virtual interfaces are required.
 
-Given a physical interface `en02`, an overlay virtual interface `en02mac` with IP `2605:d9c0::4a` can be created using:
+Given a physical interface `vlan.4070` (why is it also a VLAN? Don't ask...), an overlay virtual interface `vlan.4070-mac0` with IP `2001:48d0:3001:111::300` can be created using:
+```
+sudo ip link add link vlan.4070-mac0 link vlan.4070 type macvlan mode bridge
+sudo ip -6 addr add 2001:48d0:3001:111::300/64 dev macvlan0
+sudo ip link set up macvlan0
+sudo ip -6 r add 2001:48d0:3001:111::300 dev macvlan0 table macvlan0
+sudo ip -6 route add default via 2001:48d0:3001:111::1 dev macvlan0 table macvlan0
+sudo ip -6 rule add from 2001:48d0:3001:111::300/128 table macvlan0
+sudo ip -6 rule add to 2001:48d0:3001:111::300/128 table macvlan0
+```
+For creating another virtual interface, simply replace `mac0`, `macvlan0`, and the IPv6s in the commands above.
 
-```
-ip link add link en02mac0 link en02 type macvlan mode bridge
-ip -6 addr add 2605:d9c0::4a/64 dev macvlan0
-ip link set up macvlan0
-```
 ## Redirector-Specific Configuration
 If one chooses to use IPv6s in the same `/64` subnet, an issue might arise where the default routing scheme is to use a single macvlan as the gateway for all N macvlans. However, this renders the setup unusable since all the origins subscribe to the redirectors using the same IP.
 
