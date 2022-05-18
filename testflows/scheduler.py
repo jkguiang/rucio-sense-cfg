@@ -38,5 +38,5 @@ class TransferScheduler:
             await pool.map(self.worker, queue)
 
     def startTransfers(self) -> None:
-        print(f"Running {self.numTransfers} {self.source} --> {self.destination} transfers...")
+        print(f"Running {self.numTransfers} {self.source} --> {self.destination} transfers (ID: {self.transferID})...")
         asyncio.run(self.runTransfers())
