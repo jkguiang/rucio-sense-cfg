@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: fts
+  name: fts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: fts
+  template:
+    metadata:
+      labels:
+        k8s-app: fts
+    spec:
+      hostNetwork: True
+      hostAliases:
+      - ip: "132.249.252.251"
+        hostnames:
+        - "rucio"
+        - "ruciodb"
+        - "graphite"
+        - "minio"
+      - ip: "132.249.252.252"
+        hostnames:
+        - "fts"
+        - "ftsdb"
+      containers:
+      # FTS
+      - name: fts
+        image: docker.io/rucio/fts
+        ports:
+        - containerPort: 8449
+        - containerPort: 8446
+        resources:
+          limits:
+            cpu: 4
+            memory: 8Gi
+          requests:
+            cpu: 2
+            memory: 4Gi
+        volumeMounts:
+        - mountPath: /etc/grid-security/hostcert.pem
+          name: certs
+          subPath: hostcert_fts.pem
+        - mountPath: /etc/grid-security/hostkey.pem
+          name: certs
+          subPath: hostcert_fts.key.pem
+        - mountPath: /etc/grid-security/certificates/5fca1cb1.0
+          name: certs
+          subPath: rucio_ca.pem
+      # FTS DB
+      - name: ftsdb
+        image: docker.io/mysql:5
+        env:
+        - name: MYSQL_USER
+          value: fts
+        - name: MYSQL_PASSWORD
+          value: fts
+        - name: MYSQL_ROOT_PASSWORD
+          value: fts
+        - name: MYSQL_DATABASE
+          value: fts
+        resources:
+          limits:
+            cpu: 4
+            memory: 8Gi
+          requests:
+            cpu: 2
+            memory: 4Gi
+      nodeSelector:
+        kubernetes.io/hostname: nrp-07.nrp-nautilus.io
+      volumes:
+      - name: certs
+        secret:
+          secretName: rucio-self-certs
+          items:
+          - key: hostcert_fts.pem
+            path: hostcert_fts.pem
+          - key: hostcert_fts.key.pem
+            path: hostcert_fts.key.pem
+          - key: rucio_ca.pem
+            path: rucio_ca.pem
+          defaultMode: 0644

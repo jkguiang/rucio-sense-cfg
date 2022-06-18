@@ -1,0 +1,189 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: rucio
+  name: rucio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: rucio
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        k8s-app: rucio
+    spec:
+      hostNetwork: True
+      hostAliases:
+      - ip: "127.0.0.1"
+        hostnames:
+        - "rucio"
+        - "ruciodb"
+        - "graphite"
+        - "minio"
+      - ip: "132.249.252.252"
+        hostnames:
+        - "fts"
+        - "ftsdb"
+      containers:
+      # Rucio
+      - name: rucio
+        image: docker.io/jguiang/rucio-dev:latest
+        imagePullPolicy: Always
+        env:
+        - name: X509_USER_CERT
+          value: /opt/rucio/etc/usercert.pem
+        - name: X509_USER_KEY
+          value: /opt/rucio/etc/userkey.pem
+        - name: RDBMS
+          value: postgres11
+        ports:
+        - containerPort: 443
+        resources:
+          limits:
+            cpu: 4
+            memory: 16Gi
+          requests:
+            cpu: 2
+            memory: 2Gi
+        volumeMounts:
+        - mountPath: /opt/rucio/lib/rucio
+          name: rucio-src
+        - mountPath: /opt/rucio/bin
+          name: rucio-bin
+        - mountPath: /opt/rucio/tools
+          name: rucio-tools
+        - mountPath: /etc/grid-security/hostcert.pem
+          name: certs
+          subPath: hostcert_rucio.pem
+        - mountPath: /etc/grid-security/hostkey.pem
+          name: certs
+          subPath: hostcert_rucio.key.pem
+        - mountPath: /opt/rucio/etc/usercert.pem
+          name: certs
+          subPath: ruciouser.pem
+        - mountPath: /opt/rucio/etc/userkey.pem
+          name: certs
+          subPath: ruciouser.key.pem
+        - mountPath: /opt/rucio/etc/usercertkey.pem
+          name: certs
+          subPath: ruciousercertkey.pem
+        - mountPath: /etc/grid-security/certificates/5fca1cb1.0
+          name: certs
+          subPath: rucio_ca.pem
+      # Rucio DB
+      - name: ruciodb
+        image: docker.io/postgres:11
+        imagePullPolicy: Always
+        args: ["-c", "fsync=off", "-c", "synchronous_commit=off", "-c", "full_page_writes=off"]
+        env:
+        - name: POSTGRES_USER
+          value: rucio
+        - name: POSTGRES_DB
+          value: rucio
+        - name: POSTGRES_PASSWORD
+          value: secret
+        ports:
+        - containerPort: 5432
+        resources:
+          limits:
+            cpu: 4
+            memory: 16Gi
+          requests:
+            cpu: 2
+            memory: 2Gi
+      # Graphite
+      - name: graphite
+        image: docker.io/graphiteapp/graphite-statsd
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8125
+        resources:
+          limits:
+            cpu: 4
+            memory: 16Gi
+          requests:
+            cpu: 1
+            memory: 1Gi
+      # Minio
+      - name: minio
+        image: docker.io/minio/minio
+        imagePullPolicy: Always
+        args: ["server", "/data"]
+        env:
+        - name: MINIO_ACCESS_KEY
+          value: admin
+        - name: MINIO_SECRET_KEY
+          value: password
+        ports:
+        - containerPort: 9000
+        resources:
+          limits:
+            cpu: 4
+            memory: 16Gi
+          requests:
+            cpu: 1
+            memory: 1Gi
+        volumeMounts:
+        - mountPath: /root/.minio/certs/public.crt
+          name: certs
+          subPath: hostcert_minio.pem
+        - mountPath: /root/.minio/certs/private.key
+          name: certs
+          subPath: hostcert_minio.key.pem
+      initContainers:
+      - name: rucio-init
+        image: docker.io/alpine/git:latest
+        imagePullPolicy: Always
+        command: [
+          "/bin/sh", "-c",
+          "git clone https://github.com/aaarora/rucio -b dmm-v0.1.0 temp && cp -R temp/* /opt/rucio/"
+        ]
+        volumeMounts:
+        - mountPath: /opt/rucio/lib/rucio
+          name: rucio-src
+        - mountPath: /opt/rucio/bin
+          name: rucio-bin
+        - mountPath: /opt/rucio/tools
+          name: rucio-tools
+      nodeSelector:
+        kubernetes.io/hostname: nrp-06.nrp-nautilus.io
+      dnsPolicy: Default
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: rucio-src
+        emptyDir: {}
+      - name: rucio-bin
+        emptyDir: {}
+      - name: rucio-tools
+        emptyDir: {}
+      - name: certs
+        secret:
+          secretName: rucio-self-certs
+          items:
+          - key: hostcert_rucio.pem
+            path: hostcert_rucio.pem
+          - key: hostcert_rucio.key.pem
+            path: hostcert_rucio.key.pem
+          - key: ruciouser.pem
+            path: ruciouser.pem
+          - key: ruciouser.key.pem
+            path: ruciouser.key.pem
+          - key: ruciousercertkey.pem
+            path: ruciousercertkey.pem
+          - key: rucio_ca.pem
+            path: rucio_ca.pem
+          - key: hostcert_minio.pem
+            path: hostcert_minio.pem
+          - key: hostcert_minio.key.pem
+            path: hostcert_minio.key.pem
+          defaultMode: 0644
