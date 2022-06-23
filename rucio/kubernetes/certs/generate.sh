@@ -1,5 +1,5 @@
 #!/bin/bash
-export RUCIO_KEY_PASSWORD=secretpassword # Insert your password here
+export RUCIO_KEY_PASSWORD=wzMhSc8m-b-BIYZb5nf9-3p-bZFxeBOKWPWTQPuaCNOiWGo9r7qSKTDJ7E0uYkXFXYyCnfsSu-AVl6RFbq9Ntw # Insert your password here
 
 SCRIPT_DIR=$(dirname ${BASH_SOURCE[0]})
 
@@ -19,6 +19,7 @@ if [[ "$RUCIO_HOSTNAME" != "" && "$FTS_HOSTNAME" != "" ]]; then
         -CAkey $SCRIPT_DIR/rucio_ca.key.pem \
         -out $SCRIPT_DIR/ruciouser.pem \
         -passin env:RUCIO_KEY_PASSWORD
+    cat ruciouser.pem ruciouser.key.pem > ruciousercertkey.pem
 
     # Rucio
     rm -f $SCRIPT_DIR/hostcert_rucio.key.pem
