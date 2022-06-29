@@ -15,6 +15,8 @@ secretGenerator:
       - certs/hostcert_fts.key.pem
       - certs/hostcert_minio.pem
       - certs/hostcert_minio.key.pem
+      - certs/.sense-o-auth.yaml
+      - certs/dummykey
 
 generatorOptions:
   disableNameSuffixHash: true

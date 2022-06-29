@@ -60,6 +60,8 @@ spec:
           name: rucio-bin
         - mountPath: /opt/rucio/tools
           name: rucio-tools
+        - mountPath: /opt/dmm
+          name: dmm
         - mountPath: /etc/grid-security/hostcert.pem
           name: certs
           subPath: hostcert_rucio.pem
@@ -78,6 +80,12 @@ spec:
         - mountPath: /etc/grid-security/certificates/5fca1cb1.0
           name: certs
           subPath: rucio_ca.pem
+        - mountPath: /root/.sense-o-auth.yaml
+          name: certs
+          subPath: .sense-o-auth.yaml
+        - mountPath: /opt/dmm/dummykey
+          name: certs
+          subPath: dummykey
       # Rucio DB
       - name: ruciodb
         image: docker.io/postgres:11
@@ -144,7 +152,7 @@ spec:
         imagePullPolicy: Always
         command: [
           "/bin/sh", "-c",
-          "git clone https://github.com/aaarora/rucio -b dmm-v0.1.0 temp && cp -R temp/* /opt/rucio/"
+          "git clone https://github.com/jkguiang/rucio -b dmm-v0.1.0 temp && cp -R temp/* /opt/rucio/"
         ]
         volumeMounts:
         - mountPath: /opt/rucio/lib/rucio
@@ -153,6 +161,16 @@ spec:
           name: rucio-bin
         - mountPath: /opt/rucio/tools
           name: rucio-tools
+      - name: dmm-init
+        image: docker.io/alpine/git:latest
+        imagePullPolicy: Always
+        command: [
+          "/bin/sh", "-c",
+          "git clone https://github.com/jkguiang/rucio-sense-dmm -b v0.1.0 temp && cp -R temp/* /opt/dmm/"
+        ]
+        volumeMounts:
+        - mountPath: /opt/dmm
+          name: dmm
       nodeSelector:
         kubernetes.io/hostname: nrp-06.nrp-nautilus.io
       dnsPolicy: Default
@@ -165,6 +183,8 @@ spec:
       - name: rucio-bin
         emptyDir: {}
       - name: rucio-tools
+        emptyDir: {}
+      - name: dmm
         emptyDir: {}
       - name: certs
         secret:
@@ -186,4 +206,8 @@ spec:
             path: hostcert_minio.pem
           - key: hostcert_minio.key.pem
             path: hostcert_minio.key.pem
+          - key: .sense-o-auth.yaml
+            path: .sense-o-auth.yaml
+          - key: dummykey
+            path: dummykey
           defaultMode: 0644
