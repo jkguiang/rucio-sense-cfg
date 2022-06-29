@@ -72,7 +72,7 @@ source setup.sh
 ## 3. Running Tests: Rucio
 1. Log into the Rucio container
 ```
-kubectl exec -it rucio-HASH -- /bin/bash
+kubectl exec -it rucio-6465b8ffbf-8xd6v -- /bin/bash
 ```
 2. Initialize Rucio services
 ```
