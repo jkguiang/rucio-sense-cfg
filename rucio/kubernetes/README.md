@@ -4,12 +4,44 @@
     - Key for DMM: `dummykey`
     - Rucio CA: `rucio_ca.pem`
     - Rucio CA key: `rucio_ca.key.pem`
+    - Rucio CA key password
 2. Copy these files to `certs/`
     - Also make a symbolic link to the Rucio CA: `ln -s certs/rucio_ca.pem certs/5fca1cb1.0`
-3. Rename `certs/.sense-o-auth.yaml.example` to `certs/.sense-o-auth.yaml` and add your SENSE credentials to it
-4. Launch the Kubernetes deployments: `make create`
+3. Add the Rucio CA key password to `certs/generate.sh`
+```diff
+#!/bin/bash
+- export RUCIO_KEY_PASSWORD= # Insert your password here
++ export RUCIO_KEY_PASSWORD=Secr3tP@ssw0rd
+
+SCRIPT_DIR=$(dirname ${BASH_SOURCE[0]})
+
+RUCIO_HOSTNAME=$1
+FTS_HOSTNAME=$2
+
+if [[ "$RUCIO_HOSTNAME" != "" && "$FTS_HOSTNAME" != "" ]]; then
+    # User certificate
+    rm -f $SCRIPT_DIR/ruciouser.key.pem
+...
+```
+4. Rename `certs/.sense-o-auth.yaml.example` to `certs/.sense-o-auth.yaml` and add your SENSE credentials to it
+```diff
+AUTH_ENDPOINT: https://sense-o.es.net:8543/auth/realms/StackV/protocol/openid-connect/token
+API_ENDPOINT: https://sense-o-dev.es.net:8443/StackV-web/restapi
+CLIENT_ID: StackV
+- USERNAME: USERNAME # login email for the SENSE-O portal
++ USERNAME: MyUsername
+- PASSWORD: PASSWORD # set in SENSE-O portal: Account > Password
++ PASSWORD: Secr3tP@ssw0rd
+- SECRET: SECRET     # ask SENSE admins for this
++ SECRET: Secr3tFr0mSENSE@dmins
+verify: False
+```
+5. Launch the Kubernetes deployments
     - Note: this is configured to run on the NRP development cluster; if you are not using this cluster, edit the deployments accordingly
-5. Watch the pods to ensure that they deploy correctly
+```
+make create
+```
+6. Watch the pods to ensure that they deploy correctly
 ```
 $ kubectl get pods -o wide
 NAME                    READY   STATUS    RESTARTS   AGE   IP                NODE                    NOMINATED NODE   READINESS GATES
