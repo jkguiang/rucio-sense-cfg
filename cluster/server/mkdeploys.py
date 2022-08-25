@@ -19,7 +19,7 @@ class ServerDeploymentWriter(DeploymentWriter):
         return text
 
     def _get_deployment_name(self, config):
-        N = config["node"].split(".")[0].split("-")[-1]
+        N = config["node"].split(".")[0]
         return f"{self.app_name}-{N}-{config['port'].replace('.', '-')}"
 
     def _get_site_name(self, config):
@@ -35,7 +35,7 @@ class ServerDeploymentWriter(DeploymentWriter):
             cmd = f"../certs/generate.sh {config['ipv6']} {base_dir}"
             Popen(cmd.split(), cwd="../certs", stdout=PIPE).communicate()
 
-if __name__ == "__main__":
+def make_nrp_servers():
     server_configs = [
         # Cluster 1
         {
@@ -65,9 +65,50 @@ if __name__ == "__main__":
     ]
     deployment_writer = ServerDeploymentWriter(
         base_dir="./", 
-        template_dir="templates", 
+        template_dir="templates/nrp", 
         app_name="rucio-sense-server", 
         configs=server_configs
     )
     deployment_writer.write()
     deployment_writer.make_certs()
+
+def make_k8s_gen4_servers():
+    server_configs = [
+        # Cluster 2
+        {
+            "node": "k8s-gen4-01.sdsc.optiputer.net", 
+            "ipv6": "2001:48d0:3001:111::400",
+            "port": "1094",
+            "interface": "macvlan0",
+            "redi_ipv6": "2001:48d0:3001:111::200",
+            "redi_port": "1213",
+        }, 
+        {
+            "node": "k8s-gen4-01.sdsc.optiputer.net", 
+            "ipv6": "2001:48d0:3001:112::400",
+            "port": "1095",
+            "interface": "macvlan1",
+            "redi_ipv6": "2001:48d0:3001:112::200",
+            "redi_port": "1214",
+        }, 
+        {
+            "node": "k8s-gen4-01.sdsc.optiputer.net", 
+            "ipv6": "2001:48d0:3001:113::400",
+            "port": "1096",
+            "interface": "macvlan2",
+            "redi_ipv6": "2001:48d0:3001:113::200",
+            "redi_port": "1215",
+        }, 
+    ]
+    deployment_writer = ServerDeploymentWriter(
+        base_dir="./", 
+        template_dir="templates/k8s-gen4", 
+        app_name="rucio-sense-server", 
+        configs=server_configs
+    )
+    deployment_writer.write()
+    deployment_writer.make_certs()
+
+if __name__ == "__main__":
+    make_nrp_servers()
+    # make_k8s_gen4_servers()
