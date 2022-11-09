@@ -1,0 +1,16 @@
+ Max Goncharov from MIT wrote a set of python scripts (attached) that can be used by XRootD to calculate and store the checksum in a separated file. The caveat of using this approach is that on a file deletion, the checksum file is not deleted. You can either:
+>  - run a cron to find and clean unused checksums OR
+> - modify the script to not store the checksum and let XRootD to calculate it every time
+>
+> In order to use the scripts one needs the following in the XRootD configuration:
+>   xrootd.chksum max 24 adler32 [PATH TO adler.py]
+>
+> if you are using the multiuser plugin make sure you comment out the following directive:
+>   #ofs.ckslib ++ libXrdMultiuser.so
+>
+>
+> NB: Somebody testing the script commented about the following error in the code:
+> "There was one error in the code:  following
+> "if len(sys.argv)<2:" the next 3 lines need to be indented and were not."
+>
+> FYI, I'm going to be on vacation the following 2 weeks starting tomorrow, please contact the transfer team for any questions you might have.

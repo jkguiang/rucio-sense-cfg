@@ -7,6 +7,7 @@ RUN yum -y install vim && \
 ADD 5fca1cb1.0 /etc/grid-security/certificates/5fca1cb1.0
 ADD 5fca1cb1.signing_policy /etc/grid-security/certificates/5fca1cb1.signing_policy 
 ADD grid-mapfile /etc/grid-security/grid-mapfile
+ADD checksum/* /etc/xrootd/checksum/
 
 ADD auth-file /etc/xrootd/auth-file
 
