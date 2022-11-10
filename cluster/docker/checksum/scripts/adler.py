@@ -4,8 +4,8 @@ import sys,os,time
 import getpass,log
 import checksum
 
-os.setgid(2014)
-os.setuid(2014)
+#os.setgid(2014)
+#os.setuid(2014)
 
 logFile = log.log()
 stubName = '/cms'
