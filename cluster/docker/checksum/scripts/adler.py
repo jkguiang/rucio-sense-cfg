@@ -8,7 +8,7 @@ import checksum
 #os.setuid(2014)
 
 logFile = log.log()
-stubName = '/cms'
+stubName = '/rucio'
 
 
 if len(sys.argv)<2:
@@ -23,7 +23,7 @@ if inpName.startswith(stubName):
 else:
     fileName = inpName
 fullName = stubName + fileName
-altName = stubName + '/store/cksums' + fileName
+altName = '/rucio/cksums' + fileName
 
 # print fullName
 # print altName
