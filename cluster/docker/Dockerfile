@@ -2,7 +2,8 @@ FROM opensciencegrid/software-base:fresh
 
 RUN yum -y install vim && \
     yum -y install osg-xrootd-standalone && \
-    yum -y install osg-ca-certs
+    yum -y install osg-ca-certs && \
+    yum -y install iproute 
 
 ADD 5fca1cb1.0 /etc/grid-security/certificates/5fca1cb1.0
 ADD 5fca1cb1.signing_policy /etc/grid-security/certificates/5fca1cb1.signing_policy 
