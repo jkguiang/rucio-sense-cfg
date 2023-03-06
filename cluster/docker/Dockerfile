@@ -11,5 +11,6 @@ ADD grid-mapfile /etc/grid-security/grid-mapfile
 ADD checksum/* /etc/xrootd/checksum/
 
 ADD auth-file /etc/xrootd/auth-file
+COPY setup.sh /setup.sh
 
 ADD image-config.d/* /etc/osg/image-config.d/
