@@ -12,5 +12,6 @@ ADD checksum/* /etc/xrootd/checksum/
 
 ADD auth-file /etc/xrootd/auth-file
 COPY setup.sh /setup.sh
+COPY setup-redi.sh /setup-redi.sh
 
 ADD image-config.d/* /etc/osg/image-config.d/
