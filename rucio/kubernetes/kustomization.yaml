@@ -1,15 +1,10 @@
 resources:
   - deploy-rucio.yaml
-  - deploy-fts.yaml
+  #- deploy-fts.yaml
 
 secretGenerator:
   - name: rucio-self-certs
     files:
-      - certs/hostcert_rucio.pem
-      - certs/hostcert_rucio.key.pem
-      - certs/ruciouser.pem
-      - certs/ruciouser.key.pem
-      - certs/ruciousercertkey.pem
       - certs/rucio_ca.pem
       - certs/hostcert_fts.pem
       - certs/hostcert_fts.key.pem
@@ -17,6 +12,7 @@ secretGenerator:
       - certs/hostcert_minio.key.pem
       - certs/.sense-o-auth.yaml
       - certs/dummykey
+      - fts3config
 
 generatorOptions:
   disableNameSuffixHash: true

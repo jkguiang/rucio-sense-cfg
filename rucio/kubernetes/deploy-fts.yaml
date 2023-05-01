@@ -50,6 +50,9 @@ spec:
         - mountPath: /etc/grid-security/certificates/5fca1cb1.0
           name: certs
           subPath: rucio_ca.pem
+        - mountPath: /etc/fts3/fts3config
+          name: certs
+          subPath: fts3config
       # FTS DB
       - name: ftsdb
         image: docker.io/mysql:5
@@ -64,13 +67,13 @@ spec:
           value: fts
         resources:
           limits:
-            cpu: 4
+            cpu: 12
             memory: 8Gi
           requests:
-            cpu: 2
+            cpu: 8
             memory: 4Gi
       nodeSelector:
-        kubernetes.io/hostname: nrp-07.nrp-nautilus.io
+        kubernetes.io/hostname: rucio-sense.t2.ucsd.edu
       volumes:
       - name: certs
         secret:
@@ -82,4 +85,6 @@ spec:
             path: hostcert_fts.key.pem
           - key: rucio_ca.pem
             path: rucio_ca.pem
+          - key: fts3config
+            path: fts3config
           defaultMode: 0644

@@ -48,44 +48,36 @@ spec:
         - containerPort: 443
         resources:
           limits:
-            cpu: 4
-            memory: 16Gi
+            cpu: 24
+            memory: 24Gi
           requests:
-            cpu: 2
-            memory: 2Gi
+            cpu: 14
+            memory: 10Gi
         volumeMounts:
-        - mountPath: /opt/rucio/lib/rucio
-          name: rucio-src
-        - mountPath: /opt/rucio/bin
-          name: rucio-bin
+        - mountPath: /opt/rucio/lib
+          name: rucio-lib
         - mountPath: /opt/rucio/tools
           name: rucio-tools
+        - mountPath: /opt/rucio/bin
+          name: rucio-bin
         - mountPath: /opt/dmm
           name: dmm
         - mountPath: /etc/grid-security/hostcert.pem
-          name: certs
-          subPath: hostcert_rucio.pem
+          name: real-certs-hostcert
         - mountPath: /etc/grid-security/hostkey.pem
-          name: certs
-          subPath: hostcert_rucio.key.pem
+          name: real-certs-hostkey
         - mountPath: /opt/rucio/etc/usercert.pem
-          name: certs
-          subPath: ruciouser.pem
+          name: real-certs-hostcert
         - mountPath: /opt/rucio/etc/userkey.pem
-          name: certs
-          subPath: ruciouser.key.pem
+          name: real-certs-hostkey
         - mountPath: /opt/rucio/etc/usercertkey.pem
-          name: certs
-          subPath: ruciousercertkey.pem
+          name: real-certs-hostcertkey
         - mountPath: /etc/grid-security/certificates/5fca1cb1.0
           name: certs
           subPath: rucio_ca.pem
         - mountPath: /root/.sense-o-auth.yaml
           name: certs
           subPath: .sense-o-auth.yaml
-        - mountPath: /opt/dmm/dummykey
-          name: certs
-          subPath: dummykey
       # Rucio DB
       - name: ruciodb
         image: docker.io/postgres:11
@@ -102,11 +94,11 @@ spec:
         - containerPort: 5432
         resources:
           limits:
-            cpu: 4
+            cpu: 24
             memory: 16Gi
           requests:
-            cpu: 2
-            memory: 2Gi
+            cpu: 4
+            memory: 8Gi
       # Graphite
       - name: graphite
         image: docker.io/graphiteapp/graphite-statsd
@@ -146,60 +138,45 @@ spec:
         - mountPath: /root/.minio/certs/private.key
           name: certs
           subPath: hostcert_minio.key.pem
-      initContainers:
-      - name: rucio-init
-        image: docker.io/alpine/git:latest
-        imagePullPolicy: Always
-        command: [
-          "/bin/sh", "-c",
-          "git clone https://github.com/jkguiang/rucio -b dmm-v0.1.0 temp && cp -R temp/* /opt/rucio/"
-        ]
-        volumeMounts:
-        - mountPath: /opt/rucio/lib/rucio
-          name: rucio-src
-        - mountPath: /opt/rucio/bin
-          name: rucio-bin
-        - mountPath: /opt/rucio/tools
-          name: rucio-tools
-      - name: dmm-init
-        image: docker.io/alpine/git:latest
-        imagePullPolicy: Always
-        command: [
-          "/bin/sh", "-c",
-          "git clone https://github.com/jkguiang/rucio-sense-dmm -b v0.1.0 temp && cp -R temp/* /opt/dmm/"
-        ]
-        volumeMounts:
-        - mountPath: /opt/dmm
-          name: dmm
       nodeSelector:
-        kubernetes.io/hostname: nrp-06.nrp-nautilus.io
+        kubernetes.io/hostname: rucio-sense.t2.ucsd.edu
       dnsPolicy: Default
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30
       volumes:
-      - name: rucio-src
-        emptyDir: {}
-      - name: rucio-bin
-        emptyDir: {}
+      - name: rucio-lib
+        hostPath:
+          path: /home/aaarora/rucio/lib
+          type: Directory
       - name: rucio-tools
-        emptyDir: {}
+        hostPath:
+          path: /home/aaarora/rucio/tools
+          type: Directory
+      - name: rucio-bin
+        hostPath:
+          path: /home/aaarora/rucio/bin
+          type: Directory
       - name: dmm
-        emptyDir: {}
+        hostPath:
+          path: /home/aaarora/dmm/
+          type: Directory
+      - name: real-certs-hostcert
+        hostPath:
+          path: /home/aaarora/certs/hostcert.pem
+          type: File
+      - name: real-certs-hostkey
+        hostPath:
+          path: /home/aaarora/certs/hostkey.pem
+          type: File
+      - name: real-certs-hostcertkey
+        hostPath:
+          path: /home/aaarora/certs/hostcertkey.pem
+          type: File
       - name: certs
         secret:
           secretName: rucio-self-certs
           items:
-          - key: hostcert_rucio.pem
-            path: hostcert_rucio.pem
-          - key: hostcert_rucio.key.pem
-            path: hostcert_rucio.key.pem
-          - key: ruciouser.pem
-            path: ruciouser.pem
-          - key: ruciouser.key.pem
-            path: ruciouser.key.pem
-          - key: ruciousercertkey.pem
-            path: ruciousercertkey.pem
           - key: rucio_ca.pem
             path: rucio_ca.pem
           - key: hostcert_minio.pem
@@ -208,6 +185,4 @@ spec:
             path: hostcert_minio.key.pem
           - key: .sense-o-auth.yaml
             path: .sense-o-auth.yaml
-          - key: dummykey
-            path: dummykey
           defaultMode: 0644
