@@ -8,3 +8,4 @@ for i in $(seq 0 $1); do
   ln /rucio/testSourceFile$i /rucio/store/data/Run2018A/EGamma/MINIAOD/UL2018_MiniAODv2-v1/50000/testSourceFile$i.root  
 done
 
+chown -R xrootd:xrootd /rucio/*
